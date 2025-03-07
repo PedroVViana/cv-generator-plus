@@ -15,6 +15,7 @@ const initialData = {
   education: [],
   skills: [],
   softSkills: [],
+  languages: [],
 };
 
 const Index = () => {

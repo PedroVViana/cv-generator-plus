@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from "@/components/ui/card";
 
@@ -27,6 +26,10 @@ interface CVData {
     level: 'Básico' | 'Intermediário' | 'Avançado';
   }>;
   softSkills: string[];
+  languages: Array<{
+    name: string;
+    level: string;
+  }>;
 }
 
 interface CVPreviewProps {
@@ -91,6 +94,20 @@ const CVPreview: React.FC<CVPreviewProps> = ({ data }) => {
               <span key={index} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
                 {skill}
               </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data.languages.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-primary">Idiomas</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {data.languages.map((language, index) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
+                <span>{language.name}</span>
+                <span className="text-sm text-secondary">{language.level}</span>
+              </div>
             ))}
           </div>
         </div>

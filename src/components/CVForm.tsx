@@ -31,6 +31,10 @@ interface CVData {
     level: string;
   }>;
   softSkills: string[];
+  languages: Array<{
+    name: string;
+    level: string;
+  }>;
 }
 
 interface CVFormProps {
@@ -124,6 +128,31 @@ const CVForm: React.FC<CVFormProps> = ({ data, onChange }) => {
     onChange({
       ...data,
       softSkills: newSoftSkills,
+    });
+  };
+
+  const addLanguage = () => {
+    onChange({
+      ...data,
+      languages: [...data.languages, { name: "", level: "Básico" }],
+    });
+  };
+
+  const removeLanguage = (index: number) => {
+    const newLanguages = [...data.languages];
+    newLanguages.splice(index, 1);
+    onChange({
+      ...data,
+      languages: newLanguages,
+    });
+  };
+
+  const handleLanguageChange = (index: number, field: string, value: string) => {
+    const newLanguages = [...data.languages];
+    newLanguages[index] = { ...newLanguages[index], [field]: value };
+    onChange({
+      ...data,
+      languages: newLanguages,
     });
   };
 
@@ -308,6 +337,53 @@ const CVForm: React.FC<CVFormProps> = ({ data, onChange }) => {
                 variant="ghost"
                 size="icon"
                 onClick={() => removeSoftSkill(index)}
+              >
+                <Trash2 className="w-4 h-4 text-red-500" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Idiomas</h2>
+          <Button onClick={addLanguage} variant="outline" size="sm">
+            <PlusCircle className="w-4 h-4 mr-2" />
+            Adicionar
+          </Button>
+        </div>
+        <div className="space-y-4">
+          {data.languages.map((language, index) => (
+            <div key={index} className="flex gap-4 items-start">
+              <div className="flex-1">
+                <Input
+                  value={language.name}
+                  onChange={(e) => handleLanguageChange(index, "name", e.target.value)}
+                  placeholder="Nome do idioma"
+                />
+              </div>
+              <div className="w-40">
+                <Select
+                  value={language.level}
+                  onValueChange={(value) => handleLanguageChange(index, "level", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Nível" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Básico">Básico</SelectItem>
+                    <SelectItem value="Intermediário">Intermediário</SelectItem>
+                    <SelectItem value="Avançado">Avançado</SelectItem>
+                    <SelectItem value="Fluente">Fluente</SelectItem>
+                    <SelectItem value="Nativo">Nativo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => removeLanguage(index)}
               >
                 <Trash2 className="w-4 h-4 text-red-500" />
               </Button>
