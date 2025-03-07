@@ -88,6 +88,22 @@ const CVPreview: React.FC<CVPreviewProps> = ({
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
+  // Função para converter hex para RGB para garantir cores consistentes
+  const hexToRgb = (hex: string) => {
+    let hexColor = hex.replace('#', '');
+    
+    // Garantir que temos 6 dígitos (para casos como #fff)
+    if (hexColor.length === 3) {
+      hexColor = hexColor[0] + hexColor[0] + hexColor[1] + hexColor[1] + hexColor[2] + hexColor[2];
+    }
+    
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   // Detectar tamanho da tela
   useEffect(() => {
     const handleResize = () => {
@@ -114,12 +130,137 @@ const CVPreview: React.FC<CVPreviewProps> = ({
   const hasLanguages = data.languages.length > 0;
   const hasSocialLinks = data.socialLinks && data.socialLinks.length > 0;
 
+  // Cores em RGB para máxima compatibilidade
+  const primaryColor = hexToRgb(theme.primary);
+  const textColor = hexToRgb(theme.text);
+
+  // Constantes para garantir consistência nos espaçamentos e bordas
+  const BORDER_RADIUS = "4px";
+  const BORDER_WIDTH_NORMAL = "1px";
+  const BORDER_WIDTH_HIGHLIGHT = "2px";
+  const SECTION_MARGIN = "15px";
+
+  // Atualizar estilos para maior contraste e consistência com o PDF
+  const themeStyles = {
+    background: { backgroundColor: '#FFFFFF' },
+    title: { 
+      color: primaryColor, 
+      fontWeight: 'bold',
+      fontSize: '22px',
+      marginBottom: '8px',
+      fontFamily: "'Helvetica', 'Arial', sans-serif"
+    },
+    subtitle: { 
+      color: primaryColor, 
+      fontSize: '14px',
+      fontWeight: 'bold',
+      marginBottom: '8px',
+      paddingTop: '5px',
+      borderTop: `1px solid ${primaryColor}`,
+      fontFamily: "'Helvetica', 'Arial', sans-serif"
+    },
+    text: { 
+      color: textColor,
+      fontFamily: "'Helvetica', 'Arial', sans-serif"
+    },
+    icon: { color: primaryColor },
+    border: { 
+      borderColor: primaryColor, 
+      borderWidth: BORDER_WIDTH_NORMAL 
+    },
+    borderLeft: {
+      borderLeftColor: primaryColor,
+      borderLeftWidth: BORDER_WIDTH_HIGHLIGHT
+    },
+    contactInfo: {
+      fontSize: '9px',
+      fontWeight: 'bold',
+      color: textColor
+    },
+    badgeOutline: {
+      backgroundColor: '#FFFFFF',
+      color: textColor,
+      border: `${BORDER_WIDTH_NORMAL} solid ${primaryColor}`,
+      fontSize: '9px',
+      fontWeight: 'bold',
+    },
+    softSkillBadge: {
+      backgroundColor: '#FFFFFF',
+      color: primaryColor,
+      borderColor: '#000000',
+      borderWidth: '1.5px',
+      fontSize: '9px',
+      fontWeight: 'bold',
+      borderRadius: BORDER_RADIUS,
+      padding: '3px 8px'
+    },
+    skillBadge: {
+      backgroundColor: '#FFFFFF',
+      border: '1.5px solid #000000',
+      borderRadius: BORDER_RADIUS,
+      padding: '3px 8px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '6px',
+      marginRight: '6px'
+    },
+    skillName: {
+      color: primaryColor,
+      fontSize: '9px',
+      fontWeight: 'bold'
+    },
+    skillLevel: {
+      color: textColor,
+      fontSize: '8px'
+    },
+    languageItem: {
+      backgroundColor: '#FFFFFF',
+      border: `${BORDER_WIDTH_NORMAL} solid ${primaryColor}`,
+      borderRadius: BORDER_RADIUS,
+      padding: '3px 8px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginBottom: '5px'
+    },
+    languageName: {
+      color: textColor,
+      fontWeight: 'bold',
+      fontSize: '9px'
+    },
+    languageLevel: {
+      color: primaryColor,
+      fontWeight: 'bold',
+      fontSize: '9px'
+    },
+    experienceTitle: {
+      color: textColor,
+      fontWeight: 'bold',
+      fontSize: '11px'
+    },
+    experienceCompany: {
+      color: textColor,
+      fontWeight: 'bold',
+      fontSize: '10px',
+      marginBottom: '3px' 
+    },
+    experienceDate: {
+      color: textColor,
+      fontSize: '9px'
+    },
+    experienceDescription: {
+      color: textColor,
+      fontSize: '9px',
+      marginTop: '3px'
+    }
+  };
+
   if (!hasPersonalInfo && !hasExperience && !hasEducation && 
       !hasSkills && !hasSoftSkills && !hasLanguages && !hasSocialLinks) {
     return (
       <Card 
         className="p-6 sm:p-8 shadow-lg animate-fade-in flex flex-col items-center justify-center min-h-[400px] sm:min-h-[500px] text-center"
-        style={{ backgroundColor: theme.background }}
+        style={{ backgroundColor: '#FFFFFF' }}
       >
         <div className="text-muted-foreground">
           <User className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 sm:mb-6 opacity-20" />
@@ -130,48 +271,66 @@ const CVPreview: React.FC<CVPreviewProps> = ({
     );
   }
 
-  // Estilo aplicado com as cores do tema
-  const themeStyles = {
-    title: { color: theme.primary },
-    text: { color: theme.text },
-    border: { borderColor: `${theme.primary}33` }, // Cor primária com opacidade 20%
-    icon: { color: theme.primary },
-    background: { backgroundColor: theme.background },
-  };
-
-  // Renderiza redes sociais como ícones ou links completos
+  // Renderiza redes sociais com o mesmo visual do PDF
   const renderSocialLinks = () => {
-    return data.socialLinks.map((link: SocialLink, index: number) => {
-      if (data.socialDisplay.showAsIcons) {
-        return (
-          <a 
-            key={index}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            style={{ color: theme.primary }}
-            title={`${link.platform}: ${link.url}`}
-          >
-            <SocialIcon iconName={link.iconName} color={theme.primary} />
-          </a>
-        );
-      } else {
-        return (
-          <a 
-            key={index}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
-            style={{ color: theme.primary }}
-          >
-            <SocialIcon iconName={link.iconName} color={theme.primary} />
-            <span style={{ color: theme.text }}>{link.platform}</span>
-          </a>
-        );
-      }
-    });
+    if (!data.socialLinks || data.socialLinks.length === 0) return null;
+
+    if (data.socialDisplay.showAsIcons) {
+      return (
+        <div className="flex flex-wrap gap-2 mt-3">
+          {data.socialLinks.map((link, index) => (
+            <div 
+              key={index} 
+              className="border rounded p-1"
+              style={{
+                borderColor: primaryColor,
+                borderWidth: BORDER_WIDTH_NORMAL,
+                backgroundColor: '#FFFFFF'
+              }}
+            >
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-xs"
+                style={{
+                  color: primaryColor,
+                  fontWeight: 'bold',
+                  fontSize: '9px',
+                  textDecoration: 'none'
+                }}
+              >
+                <SocialIcon iconName={link.iconName} color={primaryColor} />
+                {link.platform}
+              </a>
+            </div>
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-col gap-1 mt-3">
+          {data.socialLinks.map((link, index) => (
+            <a
+              key={index}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 mb-1"
+              style={{
+                color: primaryColor,
+                fontWeight: 'bold',
+                fontSize: '9px',
+                textDecoration: 'none'
+              }}
+            >
+              <SocialIcon iconName={link.iconName} color={primaryColor} />
+              {link.platform}: {link.url}
+            </a>
+          ))}
+        </div>
+      );
+    }
   };
 
   return (
@@ -181,43 +340,39 @@ const CVPreview: React.FC<CVPreviewProps> = ({
         style={themeStyles.background}
       >
         {/* Cabeçalho / Informações Pessoais */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-6 sm:mb-8" style={{ borderBottom: `1px solid ${primaryColor}`, paddingBottom: '10px' }}>
           <h1 
-            className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4"
+            className="font-bold mb-3 sm:mb-4"
             style={themeStyles.title}
           >
             {data.personalInfo.name || "Seu Nome"}
           </h1>
           
           {hasPersonalInfo && (
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 text-muted-foreground">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
               {data.personalInfo.email && (
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" style={themeStyles.icon} />
-                  <span style={themeStyles.text}>{data.personalInfo.email}</span>
+                  <span style={themeStyles.contactInfo}>{data.personalInfo.email}</span>
                 </div>
               )}
               {data.personalInfo.phone && (
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4" style={themeStyles.icon} />
-                  <span style={themeStyles.text}>{data.personalInfo.phone}</span>
+                  <span style={themeStyles.contactInfo}>{data.personalInfo.phone}</span>
                 </div>
               )}
               {data.personalInfo.location && (
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" style={themeStyles.icon} />
-                  <span style={themeStyles.text}>{data.personalInfo.location}</span>
+                  <span style={themeStyles.contactInfo}>{data.personalInfo.location}</span>
                 </div>
               )}
             </div>
           )}
 
           {/* Redes Sociais */}
-          {hasSocialLinks && (
-            <div className={`mt-4 flex flex-wrap ${data.socialDisplay.showAsIcons ? 'gap-2' : 'flex-col gap-1'}`}>
-              {renderSocialLinks()}
-            </div>
-          )}
+          {hasSocialLinks && renderSocialLinks()}
         </div>
 
         {/* Experiência */}
@@ -225,31 +380,24 @@ const CVPreview: React.FC<CVPreviewProps> = ({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <Briefcase className="h-4 w-4 sm:h-5 sm:w-5" style={themeStyles.icon} />
-              <h2 
-                className="text-lg sm:text-xl font-semibold"
-                style={themeStyles.title}
-              >
+              <h2 style={themeStyles.subtitle}>
                 Experiência Profissional
               </h2>
             </div>
-            <Separator className="mb-3 sm:mb-4" style={themeStyles.border} />
             
             <div className="space-y-4 sm:space-y-6">
               {data.experience.map((exp, index) => (
                 <div 
                   key={index} 
-                  className="relative pl-3 sm:pl-5 border-l-2 hover:border-primary transition-colors"
-                  style={themeStyles.border}
+                  className="relative pl-3 sm:pl-5 border-l-2"
+                  style={themeStyles.borderLeft}
                 >
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                     <div>
-                      <h3 
-                        className="font-semibold text-base sm:text-lg"
-                        style={themeStyles.text}
-                      >
+                      <h3 style={themeStyles.experienceTitle}>
                         {exp.position}
                       </h3>
-                      <p className="text-muted-foreground text-sm" style={{ color: `${theme.text}99` }}>
+                      <p style={themeStyles.experienceCompany}>
                         {exp.company}
                       </p>
                     </div>
@@ -257,19 +405,15 @@ const CVPreview: React.FC<CVPreviewProps> = ({
                     {(exp.startDate || exp.endDate) && (
                       <Badge 
                         variant="outline" 
-                        className="ml-0 mt-1 sm:mt-0 sm:ml-2 text-xs inline-flex"
-                        style={{ borderColor: theme.primary + '50', color: theme.text + 'aa' }}
+                        className="ml-0 mt-1 sm:mt-0 sm:ml-2 inline-flex"
+                        style={themeStyles.experienceDate}
                       >
                         {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Atual'}
                       </Badge>
                     )}
                   </div>
-                  
                   {exp.description && (
-                    <p 
-                      className="mt-2 text-xs sm:text-sm text-muted-foreground"
-                      style={{ color: `${theme.text}99` }}
-                    >
+                    <p style={themeStyles.experienceDescription}>
                       {exp.description}
                     </p>
                   )}
@@ -284,34 +428,24 @@ const CVPreview: React.FC<CVPreviewProps> = ({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5" style={themeStyles.icon} />
-              <h2 
-                className="text-lg sm:text-xl font-semibold"
-                style={themeStyles.title}
-              >
+              <h2 style={themeStyles.subtitle}>
                 Educação
               </h2>
             </div>
-            <Separator className="mb-3 sm:mb-4" style={themeStyles.border} />
             
             <div className="space-y-4 sm:space-y-6">
               {data.education.map((edu, index) => (
                 <div 
                   key={index} 
-                  className="relative pl-3 sm:pl-5 border-l-2 border-primary/20 hover:border-primary transition-colors"
-                  style={themeStyles.border}
+                  className="relative pl-3 sm:pl-5 border-l-2"
+                  style={themeStyles.borderLeft}
                 >
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                     <div>
-                      <h3 
-                        className="font-semibold text-base sm:text-lg"
-                        style={themeStyles.text}
-                      >
+                      <h3 style={themeStyles.experienceTitle}>
                         {edu.degree}
                       </h3>
-                      <p 
-                        className="text-muted-foreground text-sm"
-                        style={{ color: `${theme.text}99` }}
-                      >
+                      <p style={themeStyles.experienceCompany}>
                         {edu.institution}
                       </p>
                     </div>
@@ -319,8 +453,8 @@ const CVPreview: React.FC<CVPreviewProps> = ({
                     {(edu.startDate || edu.endDate) && (
                       <Badge 
                         variant="outline" 
-                        className="ml-0 mt-1 sm:mt-0 sm:ml-2 text-xs inline-flex"
-                        style={{ borderColor: theme.primary + '50', color: theme.text + 'aa' }}
+                        className="ml-0 mt-1 sm:mt-0 sm:ml-2 inline-flex"
+                        style={themeStyles.experienceDate}
                       >
                         {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Atual'}
                       </Badge>
@@ -337,31 +471,24 @@ const CVPreview: React.FC<CVPreviewProps> = ({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <Code className="h-4 w-4 sm:h-5 sm:w-5" style={themeStyles.icon} />
-              <h2 
-                className="text-lg sm:text-xl font-semibold"
-                style={themeStyles.title}
-              >
+              <h2 style={themeStyles.subtitle}>
                 Ferramentas e Habilidades
               </h2>
             </div>
-            <Separator className="mb-3 sm:mb-4" style={themeStyles.border} />
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+            <div className="flex flex-wrap gap-2">
               {data.skills.map((skill, index) => (
                 <div 
-                  key={index} 
-                  className="flex items-center justify-between p-2 sm:p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors"
-                  style={{ backgroundColor: `${theme.primary}15` }}
+                  key={index}
+                  className="flex items-center justify-between"
+                  style={themeStyles.skillBadge}
                 >
-                  <span 
-                    className="font-medium text-sm"
-                    style={themeStyles.text}
-                  >
+                  <span style={themeStyles.skillName}>
                     {skill.name}
                   </span>
-                  <Badge style={getLevelColor(skill.level, theme)} className="text-xs">
+                  <span style={themeStyles.skillLevel}>
                     {skill.level}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>
@@ -373,28 +500,20 @@ const CVPreview: React.FC<CVPreviewProps> = ({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <Heart className="h-4 w-4 sm:h-5 sm:w-5" style={themeStyles.icon} />
-              <h2 
-                className="text-lg sm:text-xl font-semibold"
-                style={themeStyles.title}
-              >
+              <h2 style={themeStyles.subtitle}>
                 Soft Skills
               </h2>
             </div>
-            <Separator className="mb-3 sm:mb-4" style={themeStyles.border} />
             
             <div className="flex flex-wrap gap-2">
               {data.softSkills.map((skill, index) => (
-                <Badge 
-                  key={index} 
-                  variant="secondary" 
-                  className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm"
-                  style={{ 
-                    backgroundColor: `${theme.primary}20`, 
-                    color: theme.primary 
-                  }}
+                <span 
+                  key={index}
+                  className="inline-block"
+                  style={themeStyles.softSkillBadge}
                 >
                   {skill}
-                </Badge>
+                </span>
               ))}
             </div>
           </div>
@@ -405,35 +524,23 @@ const CVPreview: React.FC<CVPreviewProps> = ({
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <Globe className="h-4 w-4 sm:h-5 sm:w-5" style={themeStyles.icon} />
-              <h2 
-                className="text-lg sm:text-xl font-semibold"
-                style={themeStyles.title}
-              >
+              <h2 style={themeStyles.subtitle}>
                 Idiomas
               </h2>
             </div>
-            <Separator className="mb-3 sm:mb-4" style={themeStyles.border} />
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+            <div className="space-y-2">
               {data.languages.map((language, index) => (
                 <div 
-                  key={index} 
-                  className="flex items-center justify-between p-2 sm:p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors"
-                  style={{ backgroundColor: `${theme.primary}15` }}
+                  key={index}
+                  style={themeStyles.languageItem}
                 >
-                  <span 
-                    className="font-medium text-sm"
-                    style={themeStyles.text}
-                  >
+                  <span style={themeStyles.languageName}>
                     {language.name}
                   </span>
-                  <Badge 
-                    variant="outline"
-                    style={{ borderColor: theme.primary + '50', color: theme.text }}
-                    className="text-xs"
-                  >
+                  <span style={themeStyles.languageLevel}>
                     {language.level}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>

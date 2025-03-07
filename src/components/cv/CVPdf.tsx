@@ -27,126 +27,194 @@ const createStyles = (theme: CVTheme) => StyleSheet.create({
     padding: 30,
     fontFamily: 'Helvetica',
     color: theme.text,
-    backgroundColor: theme.background,
+    backgroundColor: '#FFFFFF', // Always white background for consistent printing
   },
   section: {
     marginBottom: 20,
   },
   header: {
-    marginBottom: 20,
-    borderBottom: '1px solid #eaeaea',
+    marginBottom: 15,
+    borderBottom: `1px solid ${theme.primary}`,
     paddingBottom: 10,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontSize: 22,
+    fontFamily: 'Helvetica-Bold',
+    marginBottom: 8,
     color: theme.primary,
   },
   subtitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 14,
+    fontFamily: 'Helvetica-Bold',
+    marginBottom: 8,
     color: theme.primary,
     paddingTop: 5,
-    borderTop: '1px solid #eaeaea',
+    borderTop: `1px solid ${theme.primary}`,
   },
   contactInfo: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 5,
-    fontSize: 10,
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
     color: theme.text,
-    opacity: 0.8,
   },
   contactItem: {
     marginRight: 15,
   },
+  experienceContainer: {
+    marginBottom: 15,
+  },
   experienceItem: {
     marginBottom: 10,
-    paddingLeft: 10,
-    borderLeft: `2px solid ${theme.primary}`,
-    borderLeftOpacity: 0.3,
+    paddingLeft: 8,
+    borderLeftWidth: 2,
+    borderLeftColor: theme.primary,
+    borderLeftStyle: 'solid',
   },
   experienceTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: 11,
+    fontFamily: 'Helvetica-Bold',
+    color: theme.text,
   },
   experienceCompany: {
     fontSize: 10,
+    fontFamily: 'Helvetica-Bold',
     color: theme.text,
-    opacity: 0.8,
+    marginBottom: 3,
   },
   experienceDate: {
     fontSize: 9,
     color: theme.text,
-    opacity: 0.6,
-    marginTop: 2,
+    padding: '3 8',
+    borderWidth: 1,
+    borderColor: theme.primary,
+    borderRadius: 4,
+    backgroundColor: '#FFFFFF',
   },
   experienceDescription: {
     fontSize: 9,
-    marginTop: 5,
+    marginTop: 3,
     color: theme.text,
-    opacity: 0.8,
+  },
+  skillsSection: {
+    marginBottom: 15,
   },
   skillsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 5,
+    gap: 6,
   },
   skillItem: {
-    fontSize: 10,
-    backgroundColor: theme.primary,
-    backgroundOpacity: 0.1,
-    padding: '4 8',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#000000',
     borderRadius: 4,
+    padding: '4 8',
     marginRight: 6,
     marginBottom: 6,
+    flexDirection: 'column',
+    width: '30%',
+  },
+  skillName: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: theme.primary,
+    marginBottom: 3,
+  },
+  skillLevelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  skillLevelLabel: {
+    fontSize: 8,
+    fontFamily: 'Helvetica',
     color: theme.text,
+    marginRight: 3,
   },
   skillLevel: {
-    fontSize: 8,
-    color: theme.text,
-    opacity: 0.7,
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: '#FFFFFF',
+    backgroundColor: theme.primary,
+    padding: '1 6',
+    borderRadius: 3,
   },
   softSkillItem: {
-    fontSize: 10,
-    backgroundColor: theme.primary,
-    backgroundOpacity: 0.1,
-    padding: '4 8',
-    borderRadius: 10,
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: theme.primary,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#000000',
+    borderRadius: 4,
+    padding: '3 8',
     marginRight: 6,
     marginBottom: 6,
-    color: theme.primary,
   },
   languageItem: {
-    fontSize: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: theme.primary,
+    borderRadius: 4,
+    padding: '3 8',
     marginBottom: 5,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
+  languageName: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: 9,
+    color: theme.text,
   },
-  socialContainer: {
+  languageLevel: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: 9,
+    color: theme.primary,
+  },
+  socialIconContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 10,
-    gap: 10,
+    gap: 5,
   },
-  socialLink: {
-    fontSize: 10,
+  socialIcon: {
+    padding: 5,
+    marginRight: 5,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: theme.primary,
+    backgroundColor: '#FFFFFF',
+  },
+  socialIconText: {
+    fontSize: 9,
     color: theme.primary,
-    marginRight: 10,
+    fontFamily: 'Helvetica-Bold',
     textDecoration: 'none',
   },
-  socialLinkFullWidth: {
-    fontSize: 10,
+  socialLinkContainer: {
+    marginTop: 10,
+    flexDirection: 'column',
+    gap: 3,
+  },
+  socialLinkText: {
+    fontSize: 9,
     color: theme.primary,
-    marginBottom: 5,
+    fontFamily: 'Helvetica-Bold',
     textDecoration: 'none',
+    marginBottom: 3,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  sectionIcon: {
+    marginRight: 5, 
+    height: 16, 
+    width: 16, 
+    color: theme.primary
   }
 });
 
@@ -163,27 +231,47 @@ const CVPdf: React.FC<CVPdfProps> = ({
   // Cria estilos baseados no tema atual
   const styles = createStyles(theme);
   
+  // Função para converter hex para RGB para garantir cores consistentes no PDF
+  const hexToRgb = (hex: string) => {
+    let hexColor = hex.replace('#', '');
+    
+    // Garantir que temos 6 dígitos (para casos como #fff)
+    if (hexColor.length === 3) {
+      hexColor = hexColor[0] + hexColor[0] + hexColor[1] + hexColor[1] + hexColor[2] + hexColor[2];
+    }
+    
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+  
   // Renderiza redes sociais
   const renderSocialLinks = () => {
     if (!data.socialLinks || data.socialLinks.length === 0) return null;
 
+    const primaryColor = hexToRgb(theme.primary);
+
     if (data.socialDisplay.showAsIcons) {
       // No PDF, mostramos os ícones como uma linha de links com o nome da plataforma
       return (
-        <View style={styles.socialContainer}>
+        <View style={styles.socialIconContainer}>
           {data.socialLinks.map((link, index) => (
-            <Link key={index} src={link.url} style={styles.socialLink}>
-              {link.platform}
-            </Link>
+            <View key={index} style={styles.socialIcon}>
+              <Link src={link.url} style={styles.socialIconText}>
+                {link.platform}
+              </Link>
+            </View>
           ))}
         </View>
       );
     } else {
       // Mostra links completos, um por linha
       return (
-        <View style={{ marginTop: 10 }}>
+        <View style={styles.socialLinkContainer}>
           {data.socialLinks.map((link, index) => (
-            <Link key={index} src={link.url} style={styles.socialLinkFullWidth}>
+            <Link key={index} src={link.url} style={styles.socialLinkText}>
               {link.platform}: {link.url}
             </Link>
           ))}
@@ -192,12 +280,20 @@ const CVPdf: React.FC<CVPdfProps> = ({
     }
   };
   
+  // Verifica se seções existem
+  const hasExperience = data.experience.length > 0;
+  const hasEducation = data.education.length > 0;
+  const hasSkills = data.skills.length > 0;
+  const hasSoftSkills = data.softSkills.length > 0;
+  const hasLanguages = data.languages.length > 0;
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Cabeçalho / Informações Pessoais */}
         <View style={styles.header}>
           <Text style={styles.title}>{data.personalInfo.name || "Seu Nome"}</Text>
+          
           <View style={styles.contactInfo}>
             {data.personalInfo.email && (
               <Text style={styles.contactItem}>{data.personalInfo.email}</Text>
@@ -215,18 +311,24 @@ const CVPdf: React.FC<CVPdfProps> = ({
         </View>
 
         {/* Experiência */}
-        {data.experience.length > 0 && (
-          <View style={styles.section}>
+        {hasExperience && (
+          <View style={styles.experienceContainer}>
             <Text style={styles.subtitle}>Experiência Profissional</Text>
+            
             {data.experience.map((exp, index) => (
               <View key={index} style={styles.experienceItem}>
-                <View style={styles.row}>
-                  <Text style={styles.experienceTitle}>{exp.position}</Text>
-                  <Text style={styles.experienceDate}>
-                    {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Atual'}
-                  </Text>
+                <View style={styles.flexRow}>
+                  <View>
+                    <Text style={styles.experienceTitle}>{exp.position}</Text>
+                    <Text style={styles.experienceCompany}>{exp.company}</Text>
+                  </View>
+                  
+                  {(exp.startDate || exp.endDate) && (
+                    <Text style={styles.experienceDate}>
+                      {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Atual'}
+                    </Text>
+                  )}
                 </View>
-                <Text style={styles.experienceCompany}>{exp.company}</Text>
                 {exp.description && (
                   <Text style={styles.experienceDescription}>{exp.description}</Text>
                 )}
@@ -236,61 +338,83 @@ const CVPdf: React.FC<CVPdfProps> = ({
         )}
 
         {/* Educação */}
-        {data.education.length > 0 && (
-          <View style={styles.section}>
+        {hasEducation && (
+          <View style={styles.experienceContainer}>
             <Text style={styles.subtitle}>Educação</Text>
+            
             {data.education.map((edu, index) => (
               <View key={index} style={styles.experienceItem}>
-                <View style={styles.row}>
-                  <Text style={styles.experienceTitle}>{edu.degree}</Text>
-                  <Text style={styles.experienceDate}>
-                    {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Atual'}
-                  </Text>
+                <View style={styles.flexRow}>
+                  <View>
+                    <Text style={styles.experienceTitle}>{edu.degree}</Text>
+                    <Text style={styles.experienceCompany}>{edu.institution}</Text>
+                  </View>
+                  
+                  {(edu.startDate || edu.endDate) && (
+                    <Text style={styles.experienceDate}>
+                      {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : 'Atual'}
+                    </Text>
+                  )}
                 </View>
-                <Text style={styles.experienceCompany}>{edu.institution}</Text>
               </View>
             ))}
           </View>
         )}
 
-        {/* Habilidades */}
-        {data.skills.length > 0 && (
-          <View style={styles.section}>
+        {/* Habilidades Técnicas */}
+        {hasSkills && (
+          <View style={styles.skillsSection}>
             <Text style={styles.subtitle}>Ferramentas e Habilidades</Text>
+            
             <View style={styles.skillsContainer}>
               {data.skills.map((skill, index) => (
                 <View key={index} style={styles.skillItem}>
-                  <Text>{skill.name} <Text style={styles.skillLevel}>({skill.level})</Text></Text>
+                  <Text style={styles.skillName}>
+                    {skill.name}
+                  </Text>
+                  
+                  {skill.level && (
+                    <View style={styles.skillLevelContainer}>
+                      <Text style={styles.skillLevelLabel}>Nível:</Text>
+                      <Text style={styles.skillLevel}>
+                        {skill.level}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               ))}
             </View>
           </View>
         )}
 
-        {/* Soft Skills */}
-        {data.softSkills.length > 0 && (
-          <View style={styles.section}>
+        {/* Soft Skills / Competências */}
+        {hasSoftSkills && (
+          <View style={styles.skillsSection}>
             <Text style={styles.subtitle}>Soft Skills</Text>
+            
             <View style={styles.skillsContainer}>
               {data.softSkills.map((skill, index) => (
-                <View key={index} style={styles.softSkillItem}>
-                  <Text>{skill}</Text>
-                </View>
+                <Text key={index} style={styles.softSkillItem}>
+                  {skill}
+                </Text>
               ))}
             </View>
           </View>
         )}
 
         {/* Idiomas */}
-        {data.languages.length > 0 && (
-          <View style={styles.section}>
+        {hasLanguages && (
+          <View style={styles.skillsSection}>
             <Text style={styles.subtitle}>Idiomas</Text>
-            {data.languages.map((language, index) => (
-              <View key={index} style={styles.languageItem}>
-                <Text>{language.name}</Text>
-                <Text style={styles.skillLevel}>{language.level}</Text>
-              </View>
-            ))}
+            
+            <View style={{marginTop: 2}}>
+              {data.languages.map((language, index) => (
+                <View key={index} style={styles.languageItem}>
+                  <Text style={styles.languageName}>{language.name}</Text>
+                  <Text style={styles.languageLevel}>{language.level}</Text>
+                </View>
+              ))}
+            </View>
           </View>
         )}
       </Page>
