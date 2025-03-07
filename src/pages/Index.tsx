@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CVForm from '@/components/CVForm';
 import CVPreview from '@/components/CVPreview';
@@ -14,6 +13,8 @@ const initialData = {
   },
   experience: [],
   education: [],
+  skills: [],
+  softSkills: [],
 };
 
 const Index = () => {

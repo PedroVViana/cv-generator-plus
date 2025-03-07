@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Trash2 } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface CVData {
   personalInfo: {
@@ -26,6 +26,11 @@ interface CVData {
     startDate: string;
     endDate: string;
   }>;
+  skills: Array<{
+    name: string;
+    level: string;
+  }>;
+  softSkills: string[];
 }
 
 interface CVFormProps {
@@ -69,6 +74,56 @@ const CVForm: React.FC<CVFormProps> = ({ data, onChange }) => {
     onChange({
       ...data,
       experience: newExperience,
+    });
+  };
+
+  const addSkill = () => {
+    onChange({
+      ...data,
+      skills: [...data.skills, { name: "", level: "Básico" }],
+    });
+  };
+
+  const removeSkill = (index: number) => {
+    const newSkills = [...data.skills];
+    newSkills.splice(index, 1);
+    onChange({
+      ...data,
+      skills: newSkills,
+    });
+  };
+
+  const handleSkillChange = (index: number, field: string, value: string) => {
+    const newSkills = [...data.skills];
+    newSkills[index] = { ...newSkills[index], [field]: value };
+    onChange({
+      ...data,
+      skills: newSkills,
+    });
+  };
+
+  const addSoftSkill = () => {
+    onChange({
+      ...data,
+      softSkills: [...data.softSkills, ""],
+    });
+  };
+
+  const removeSoftSkill = (index: number) => {
+    const newSoftSkills = [...data.softSkills];
+    newSoftSkills.splice(index, 1);
+    onChange({
+      ...data,
+      softSkills: newSoftSkills,
+    });
+  };
+
+  const handleSoftSkillChange = (index: number, value: string) => {
+    const newSoftSkills = [...data.softSkills];
+    newSoftSkills[index] = value;
+    onChange({
+      ...data,
+      softSkills: newSoftSkills,
     });
   };
 
@@ -182,6 +237,80 @@ const CVForm: React.FC<CVFormProps> = ({ data, onChange }) => {
                   />
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Ferramentas e Habilidades</h2>
+          <Button onClick={addSkill} variant="outline" size="sm">
+            <PlusCircle className="w-4 h-4 mr-2" />
+            Adicionar
+          </Button>
+        </div>
+        <div className="space-y-4">
+          {data.skills.map((skill, index) => (
+            <div key={index} className="flex gap-4 items-start">
+              <div className="flex-1">
+                <Input
+                  value={skill.name}
+                  onChange={(e) => handleSkillChange(index, "name", e.target.value)}
+                  placeholder="Nome da habilidade"
+                />
+              </div>
+              <div className="w-40">
+                <Select
+                  value={skill.level}
+                  onValueChange={(value) => handleSkillChange(index, "level", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Nível" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Básico">Básico</SelectItem>
+                    <SelectItem value="Intermediário">Intermediário</SelectItem>
+                    <SelectItem value="Avançado">Avançado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => removeSkill(index)}
+              >
+                <Trash2 className="w-4 h-4 text-red-500" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Soft Skills</h2>
+          <Button onClick={addSoftSkill} variant="outline" size="sm">
+            <PlusCircle className="w-4 h-4 mr-2" />
+            Adicionar
+          </Button>
+        </div>
+        <div className="space-y-4">
+          {data.softSkills.map((skill, index) => (
+            <div key={index} className="flex gap-4 items-center">
+              <Input
+                value={skill}
+                onChange={(e) => handleSoftSkillChange(index, e.target.value)}
+                placeholder="Digite uma soft skill"
+                className="flex-1"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => removeSoftSkill(index)}
+              >
+                <Trash2 className="w-4 h-4 text-red-500" />
+              </Button>
             </div>
           ))}
         </div>
