@@ -1,4 +1,3 @@
-
 export interface PersonalInfo {
   name: string;
   email: string;
@@ -24,6 +23,16 @@ export interface Language {
   level: string;
 }
 
+export interface SocialLink {
+  platform: string;  // ex: "LinkedIn", "GitHub", "Twitter", etc.
+  url: string;
+  iconName: string;  // nome do ícone no Lucide Icons
+}
+
+export interface SocialDisplayOption {
+  showAsIcons: boolean;  // true para ícones, false para links completos
+}
+
 export interface CVData {
   personalInfo: PersonalInfo;
   experience: Experience[];
@@ -36,4 +45,6 @@ export interface CVData {
   skills: Skill[];
   softSkills: string[];
   languages: Language[];
+  socialLinks: SocialLink[];
+  socialDisplay: SocialDisplayOption;
 }
